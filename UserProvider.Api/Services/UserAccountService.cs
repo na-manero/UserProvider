@@ -48,12 +48,10 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
         try
         {
-            var user = await _userRepository.GetUserByEmailAsync(model.Email);
+            var user = await _userRepository.GetUserByIdAsync(model.UserId);
 
             if (user != null)
             {
-                model.UserId ??= user.Id;
-
                 var updatedUser = UserFactory.Create(model);
 
                 if (updatedUser == null)
