@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 using UserProvider.Data.Entities;
 using UserProvider.Data.Factories;
 using UserProvider.Data.Models;
@@ -6,10 +7,11 @@ using UserProvider.Data.Repo;
 
 namespace UserProvider.Api.Services;
 
-public class UserAccountService(IUserProfileRepository userProfileRepository, IUserRepository userRepository) : IUserAccountService
+public class UserAccountService(IUserProfileRepository userProfileRepository, IUserRepository userRepository, UserManager<UserEntity> userManager) : IUserAccountService
 {
     private readonly IUserProfileRepository _userProfileRepository = userProfileRepository;
     private readonly IUserRepository _userRepository = userRepository;
+    private readonly UserManager<UserEntity> _userManager = userManager;
 
     public async Task<bool> CreateProfileAsync(UserAccountModel model)
     {
@@ -48,35 +50,41 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
         try
         {
-            var user = await _userRepository.GetUserByIdAsync(model.UserId);
+            var user = await _userManager.FindByIdAsync(model.UserId);
 
             if (user != null)
             {
-                var updatedUser = UserFactory.Create(model);
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
 
-                if (updatedUser == null)
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result == null)
                     return false;
 
-                await _userRepository.UpdateUserAsync(updatedUser);
-
-                var userProfile = await _userProfileRepository.GetUserByIdAsync(user.Id);
+                var userProfile = await _userProfileRepository.GetUserByIdAsync(model.UserId);
 
                 if (userProfile != null)
                 {
-                    var updatedUserProfile = UserFactory.CreateProfile(model);
+                    userProfile.FirstName = model.FirstName;
+                    userProfile.LastName = model.LastName;
+                    userProfile.Location = model.Location;
+                    userProfile.ImageUrl = model.ImageUrl;
 
-                    if (updatedUserProfile == null)
-                        return false;
-
-                    await _userProfileRepository.UpdateUserAsync(updatedUserProfile);
+                    await _userProfileRepository.UpdateUserAsync(userProfile);
                 }
                 else
+                {
                     await CreateProfileAsync(model);
+                }
+
+                return true;
             }
             else
+            {
                 return false;
-
-            return true;
+            }
         }
         catch (Exception ex)
         {
