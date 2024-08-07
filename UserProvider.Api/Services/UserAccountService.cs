@@ -13,6 +13,9 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
     public async Task<bool> CreateProfileAsync(UserAccountModel model)
     {
+        if (model == null)
+            return false;
+
         try
         {
             var user = await _userRepository.GetUserByEmailAsync(model.Email);
@@ -20,6 +23,10 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
             if (user != null)
             {
                 var newUserProfile = UserFactory.CreateProfile(model);
+
+                if (newUserProfile == null)
+                    return false;
+
                 await _userProfileRepository.CreateUserAsync(newUserProfile);
                 return true;
             }
@@ -35,6 +42,9 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
     public async Task<bool> UpdateUserAsync(UserAccountModel model)
     {
+        if (model == null)
+            return false;
+
         try
         {
             var user = await _userRepository.GetUserByEmailAsync(model.Email);
@@ -42,6 +52,10 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
             if (user != null)
             {
                 var updatedUser = UserFactory.Create(model);
+
+                if (updatedUser == null)
+                    return false;
+
                 await _userRepository.UpdateUserAsync(updatedUser);
 
                 var userProfile = await _userProfileRepository.GetUserByIdAsync(user.Id);
@@ -49,6 +63,10 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
                 if (userProfile != null)
                 {
                     var updatedUserProfile = UserFactory.CreateProfile(model);
+
+                    if (updatedUserProfile == null)
+                        return false;
+
                     await _userProfileRepository.UpdateUserAsync(updatedUserProfile);
                 }
                 else
@@ -68,12 +86,19 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
     public async Task<UserAccountModel> GetUserByIdAsync(string userId)
     {
+        if (string.IsNullOrWhiteSpace(userId))
+            return null!;
+
         try
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
+
+            if (user == null)
+                return null!;
+
             var profile = await _userProfileRepository.GetUserByIdAsync(userId);
 
-            return UserFactory.CreateUserAccount(user, profile);
+            return UserFactory.CreateUserAccount(user, profile)!;
         }
         catch (Exception ex)
         {
@@ -84,12 +109,19 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
     public async Task<UserAccountModel> GetUserByEmailAsync(string email)
     {
+        if (string.IsNullOrWhiteSpace(email))
+            return null!;
+
         try
         {
             var user = await _userRepository.GetUserByEmailAsync(email);
+
+            if (user == null)
+                return null!;
+
             var profile = await _userProfileRepository.GetUserByIdAsync(user.Id);
 
-            return UserFactory.CreateUserAccount(user, profile);
+            return UserFactory.CreateUserAccount(user, profile)!;
         }
         catch (Exception ex)
         {

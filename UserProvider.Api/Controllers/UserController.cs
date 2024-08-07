@@ -58,7 +58,7 @@ public class UserController(IUserAccountService userProfileService) : Controller
         UserAccountModel user;
         try
         {
-            if (string.IsNullOrWhiteSpace(userId))
+            if (!string.IsNullOrWhiteSpace(userId))
                 user = await _userService.GetUserByIdAsync(userId);
             else
                 return BadRequest(null!);
@@ -69,7 +69,7 @@ public class UserController(IUserAccountService userProfileService) : Controller
             return BadRequest();
         }
 
-        return user != null ? Ok(user) : Conflict(null!);
+        return user != null ? Ok(user) : NotFound();
     }
 
     [HttpGet]
@@ -79,10 +79,10 @@ public class UserController(IUserAccountService userProfileService) : Controller
         UserAccountModel user;
         try
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (!string.IsNullOrWhiteSpace(email))
                 user = await _userService.GetUserByEmailAsync(email);
             else
-                return BadRequest(null!);
+                return BadRequest();
         }
         catch (Exception ex)
         {
@@ -90,6 +90,6 @@ public class UserController(IUserAccountService userProfileService) : Controller
             return BadRequest();
         }
 
-        return user != null ? Ok(user) : Conflict(null!);
+        return user != null ? Ok(user) : NotFound();
     }
 }
