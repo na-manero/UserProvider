@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+builder.Services.AddDbContext<DataContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer") ?? Environment.GetEnvironmentVariable("SqlServer_ConnectionString")));
 
 builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
 {
@@ -22,7 +22,7 @@ builder.Services.AddIdentity<UserEntity, IdentityRole>(x =>
 
 builder.Services.AddSingleton(sp =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("ServiceBus");
+    var connectionString = builder.Configuration.GetConnectionString("ServiceBus") ?? Environment.GetEnvironmentVariable("ServiceBus_ConnectionString");
     return new ServiceBusClient(connectionString);
 });
 
