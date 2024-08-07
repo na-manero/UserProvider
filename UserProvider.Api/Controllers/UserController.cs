@@ -13,21 +13,18 @@ public class UserController(IUserAccountService userProfileService) : Controller
     [Route("/api/account/create-profile")]
     public async Task<IActionResult> CreateProfile(UserAccountModel model)
     {
-        bool result;
         try
         {
             if (model != null)
-                result = await _userService.CreateProfileAsync(model);
+                return await _userService.CreateProfileAsync(model) ? Ok() : Conflict();
             else
-                return BadRequest();
+                return NotFound();
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
             return BadRequest();
         }
-
-        return result ? Ok() : Conflict();
     }
 
     [HttpPost]
@@ -38,17 +35,15 @@ public class UserController(IUserAccountService userProfileService) : Controller
         try
         {
             if (model != null)
-                result = await _userService.UpdateUserAsync(model);
+                return await _userService.UpdateUserAsync(model) ? Ok() : Conflict();
             else
-                return BadRequest();
+                return NotFound();
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex.Message);
             return BadRequest();
         }
-
-        return result ? Ok() : Conflict();
     }
 
     [HttpGet]
