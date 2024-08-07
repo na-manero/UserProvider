@@ -1,20 +1,49 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using UserProvider.Data.Entities;
+using UserProvider.Data.Models;
 
 namespace UserProvider.Data.Factories;
 
 public class UserFactory
 {
-    public static UserProfileEntity Create(UserProfileEntity user)
+    /// <summary>
+    /// Create UserProfile Entity
+    /// </summary>
+    public static UserEntity Create(UserAccountModel user)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(user?.Email))
+            if (string.IsNullOrWhiteSpace(user?.FirstName))
+                return null!;
+
+            return new UserEntity()
+            {
+                Email = user!.Email,
+                PhoneNumber = user?.PhoneNumber
+            };
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("UserFactory : " + ex.Message);
+        }
+
+        return null!;
+    }       
+    
+    /// <summary>
+    /// Create UserProfile Entity
+    /// </summary>
+    public static UserProfileEntity CreateProfile(UserAccountModel user)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(user?.FirstName))
                 return null!;
 
             return new UserProfileEntity()
             {
-                Email = user!.Email,
+                UserId = user?.UserId ?? "",
                 FirstName = user!.FirstName,
                 LastName = user!.LastName
             };
@@ -25,5 +54,30 @@ public class UserFactory
         }
 
         return null!;
+    }
+
+    public static UserAccountModel CreateUserAccount(UserEntity user, UserProfileEntity profile)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(user.Email))
+                return null!;
+
+            return new UserAccountModel()
+            {
+                UserId = user.Id,
+                FirstName = profile.FirstName, 
+                LastName = profile.LastName, 
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Location = profile.Location,
+                ImageUrl = profile.ImageUrl
+            };
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("UserFactory : " + ex.Message);
+            return null!;
+        }
     }
 }

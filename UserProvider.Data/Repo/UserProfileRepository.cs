@@ -38,21 +38,6 @@ public class UserProfileRepository(DataContext context) : IUserProfileRepository
         return null!;
     }
 
-    // Read All Users
-    public async Task<UserProfileEntity> GetUserByEmailAsync(string email)
-    {
-        try
-        {
-            return await _context.UserProfiles.FirstOrDefaultAsync(u => u.Email == email) ?? null!;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex.Message);
-        }
-
-        return null!;
-    }
-
     // Update User
     public async Task UpdateUserAsync(UserProfileEntity user)
     {

@@ -10,7 +10,7 @@ public class UserRepository(DataContext context) : IUserRepository
     private readonly DataContext _context = context;
 
     // Create User
-    public async Task CreateUser(UserEntity user)
+    public async Task CreateUserAsync(UserEntity user)
     {
         try
         {
@@ -54,7 +54,7 @@ public class UserRepository(DataContext context) : IUserRepository
     }
 
     // Update User
-    public async Task UpdateUser(UserEntity user)
+    public async Task UpdateUserAsync(UserEntity user)
     {
         try
         {
@@ -68,7 +68,7 @@ public class UserRepository(DataContext context) : IUserRepository
     }
 
     // Delete User
-    public async Task DeleteUser(string userId)
+    public async Task DeleteUserAsync(string userId)
     {
         try
         {
