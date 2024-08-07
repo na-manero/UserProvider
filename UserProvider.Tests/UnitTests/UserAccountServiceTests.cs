@@ -18,7 +18,7 @@ public class UserAccountServiceTests
     {
         _mockUserProfileRepository = new Mock<IUserProfileRepository>();
         _mockUserRepository = new Mock<IUserRepository>();
-        _userAccountService = new UserAccountService(_mockUserProfileRepository.Object, _mockUserRepository.Object);
+        _userAccountService = new UserAccountService(_mockUserProfileRepository.Object, _mockUserRepository.Object, null!);
     }
 
     [Fact]
