@@ -29,7 +29,7 @@ builder.Services.AddSingleton(sp =>
 builder.Services.AddScoped<IServiceBusHandler, ServiceBusHandler>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
-builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+builder.Services.AddScoped<IUserAccountService, UserAccountService>();
 
 builder.Services.AddHostedService<NewUserMessageReceiver>();
 

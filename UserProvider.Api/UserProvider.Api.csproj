@@ -20,8 +20,4 @@
     <ProjectReference Include="..\UserProvider.Data\UserProvider.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
