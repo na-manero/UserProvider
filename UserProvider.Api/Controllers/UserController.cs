@@ -31,7 +31,6 @@ public class UserController(IUserAccountService userProfileService) : Controller
     [Route("/api/account/update-user")]
     public async Task<IActionResult> UpdateUser(UserAccountModel model)
     {
-        bool result;
         try
         {
             if (model != null)

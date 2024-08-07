@@ -44,7 +44,7 @@ public class UserFactory
 
             return new UserProfileEntity()
             {
-                UserId = user?.UserId ?? "",
+                UserId = user!.UserId,
                 FirstName = user!.FirstName,
                 LastName = user!.LastName
             };

@@ -12,8 +12,8 @@ using UserProvider.Data.Context;
 namespace UserProvider.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240804111419_AddUserProfileEntity")]
-    partial class AddUserProfileEntity
+    [Migration("20240807090542_AddUserProfile")]
+    partial class AddUserProfile
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -228,10 +228,6 @@ namespace UserProvider.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -243,7 +239,7 @@ namespace UserProvider.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");

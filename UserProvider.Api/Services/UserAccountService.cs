@@ -22,6 +22,7 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
             if (user != null)
             {
+                model.UserId ??= user.Id;
                 var newUserProfile = UserFactory.CreateProfile(model);
 
                 if (newUserProfile == null)
@@ -51,6 +52,8 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
             if (user != null)
             {
+                model.UserId ??= user.Id;
+
                 var updatedUser = UserFactory.Create(model);
 
                 if (updatedUser == null)
@@ -98,6 +101,9 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
 
             var profile = await _userProfileRepository.GetUserByIdAsync(userId);
 
+            if (profile == null)
+                return null!;
+
             return UserFactory.CreateUserAccount(user, profile)!;
         }
         catch (Exception ex)
@@ -120,6 +126,9 @@ public class UserAccountService(IUserProfileRepository userProfileRepository, IU
                 return null!;
 
             var profile = await _userProfileRepository.GetUserByIdAsync(user.Id);
+
+            if (profile == null)
+                return null!;
 
             return UserFactory.CreateUserAccount(user, profile)!;
         }

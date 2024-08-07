@@ -18,7 +18,7 @@ public class NewUserMessageReceiver(IServiceScopeFactory serviceScopeFactory) : 
 
         try
         {
-            await userProfileService.CreateProfileAsync(model);
+            _ = await userProfileService.CreateProfileAsync(model);
         }
         catch (Exception ex)
         {
