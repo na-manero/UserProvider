@@ -5,6 +5,7 @@ using UserProvider.Data.Models;
 
 namespace UserProvider.Api.Controllers;
 
+[ApiController]
 public class UserController(IUserAccountService userProfileService) : ControllerBase
 {
     private readonly IUserAccountService _userService = userProfileService;
